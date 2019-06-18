@@ -1,2 +1,11 @@
-body {background-color: yellow;}
-td {padding: 30px; border: #ffffff solid 3px;}
+* {box-sizing: border-box; font-family: Arial, Helvetica, sans-serif;}
+
+td {padding: 30px; border: #fdee1f solid 10px; width: 33%;}
+.chart-container {width:75%;}
+#image-list {width:25%; float: right; padding: 30px; font-size: 10px; color: rgb(94, 94, 94);}
+li {padding-bottom: 8px; line-height: 1.2;}
+.data, #image-table {margin: 50px auto; max-width: 1000px;}
+#image-table img {width: 100%;}
+h1 {font-size: 40px; color: rgb(121, 121, 121); font-weight: bold; text-align: center; margin: 30px; }
+header p {font-size: 16px; color: rgb(59, 59, 59); text-align: center; margin: 20px; }
+header {margin-top: 50px; }

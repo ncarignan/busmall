@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Bus Mall Images</title>
   <link rel="stylesheet" href="./css/reset.css">
   <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
-  <header></header>
+  <header>
+    <h1>Select your favorite image</h1>
+    <p>After you select 25 images, you'll be shown a chart that shows what you selected.</p>
+  </header>
   <main>
+
     <table id="image-table">
       <tr>
-        <td><img id="image1" src="" width="200"></td>
-        <td><img id="image2" src="" width="200"></td>
-        <td><img id="image3" src="" width="200"></td></td>
+        <td><img id="image1" src=""></td>
+        <td><img id="image2" src=""></td>
+        <td><img id="image3" src=""></td>
+        </td>
       </tr>
     </table>
-    <ul id="image-list">
-
-    </ul>
+    <div class="data">
+      <ul id="image-list">
+      </ul>
+      <div class="chart-container">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>
+    </div>
 
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
   <script src="./js/app.js"></script>
 </body>
 
