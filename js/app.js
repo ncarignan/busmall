@@ -84,7 +84,7 @@ var pickThreeImages = function() {
 
   }
 
-  console.log('before reset: ' + imageStatus);
+  //console.log('before reset: ' + imageStatus);
 
   //reset imageStatusArray
   for (var i=0; i <ImageObject.allImages.length; i++){
@@ -95,13 +95,13 @@ var pickThreeImages = function() {
     } else {imageStatus[i]=0;}
   }
 
-  console.log('after reset: ' + imageStatus);
+  //console.log('after reset: ' + imageStatus);
 
   image1.src = ImageObject.allImages[indexesOfThreeOnPage[0]].url;
   image2.src = ImageObject.allImages[indexesOfThreeOnPage[1]].url;
   image3.src = ImageObject.allImages[indexesOfThreeOnPage[2]].url;
 
-  if (numberOfImagesClicked > 10) {
+  if (numberOfImagesClicked > 25) {
     imageTableTag.removeEventListener('click', imageClickedOn);
     printImageList();
     //console.log('stop event listener');
