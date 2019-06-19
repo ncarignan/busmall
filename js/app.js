@@ -8,7 +8,7 @@ var image2 = document.getElementById('image2');
 var image3 = document.getElementById('image3');
 var indexesOfThreeOnPage = [];
 var numberOfImagesClicked = 0;
-var maxClicks = 25;
+var maxClicks = 10;
 
 //var threeOnPageArr = [];
 
@@ -99,8 +99,9 @@ var pickThreeImages = function () {
 
   if (numberOfImagesClicked > maxClicks) {
     imageTableTag.removeEventListener('click', imageClickedOn);
-    printImageList();
+    pushDataToLocalStorage();
     createPieChart();
+    printImageList();
     //console.log('stop event listener');
   } else {
     imageTableTag.addEventListener('click', imageClickedOn);
@@ -110,14 +111,19 @@ var pickThreeImages = function () {
 
 var printImageList = function () {
 
+  // Retreive data from local storage
+  var chartLabels = JSON.parse(localStorage.getItem('chartLabels'));
+  var chartPercentages = JSON.parse(localStorage.getItem('chartPercentages'));
+  var clicks = JSON.parse(localStorage.getItem('imageClicks'));
+  var imageTimesShown = JSON.parse(localStorage.getItem('imageTimesShown'));
   var imageList = document.getElementById('image-list');
+
+  // Render list of data next to chart
   for (var k = 0; k < ImageObject.allImages.length; k++) {
     var imageListItem = document.createElement('li');
-    var percentClicked = Math.floor((ImageObject.allImages[k].clicks / ImageObject.allImages[k].timesShown) * 100);
-    imageListItem.textContent = ImageObject.allImages[k].clicks + ' out of ' + ImageObject.allImages[k].timesShown + ' votes for the ' + ImageObject.allImages[k].name + ' (' + percentClicked + '%)';
+    imageListItem.textContent = clicks[k] + ' out of ' + imageTimesShown[k] + ' votes for the ' + chartLabels[k] + ' (' + chartPercentages[k] + '%)';
     imageList.appendChild(imageListItem);
   }
-
 };
 
 var imageClickedOn = function (event) {
@@ -136,19 +142,40 @@ var imageClickedOn = function (event) {
   pickThreeImages();
 };
 
-function createPieChart() {
+function pushDataToLocalStorage() {
 
   var chartLabels = [];
   var chartPercentages = [];
+  var imageClicks = [];
+  var imageTimesShown = [];
 
   for (var m = 0; m < ImageObject.allImages.length; m++) {
     chartLabels.push(ImageObject.allImages[m].name);
-    chartPercentages.push(ImageObject.allImages[m].clicks / ImageObject.allImages[m].timesShown * 100);
-
+    chartPercentages.push(Math.floor(ImageObject.allImages[m].clicks / ImageObject.allImages[m].timesShown * 100));
+    imageClicks.push(ImageObject.allImages[m].clicks);
+    imageTimesShown.push(ImageObject.allImages[m].timesShown);
   }
 
-  console.log(chartLabels);
-  console.log(chartPercentages);
+  // Put chart labels and percentages into local storage
+  var chartLablesStringified = JSON.stringify(chartLabels);
+  localStorage.setItem('chartLabels', chartLablesStringified);
+
+  var chartPercentagesStringified = JSON.stringify(chartPercentages);
+  localStorage.setItem('chartPercentages', chartPercentagesStringified);
+
+  var imageClicksStringified = JSON.stringify(imageClicks);
+  localStorage.setItem('imageClicks', imageClicksStringified);
+
+  var imageTimesShownStringified = JSON.stringify(imageTimesShown);
+  localStorage.setItem('imageTimesShown', imageTimesShownStringified);
+
+}
+
+function createPieChart() {
+
+  // Retreive chart labels and percentages from local storage 
+  var chartLabels = JSON.parse(localStorage.getItem('chartLabels'));
+  var chartPercentages = JSON.parse(localStorage.getItem('chartPercentages'));
 
   var ctx = document.getElementById('myChart');
   var myChart = new Chart(ctx, {
