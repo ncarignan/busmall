@@ -2,6 +2,7 @@
 
 // GLOBAL VARIABLES
 
+var myChart = null;
 var imageTableTag = document.getElementById('image-table');
 var buttonTableTag = document.getElementById('button-table');
 var restartButtonTag = document.getElementById('restart-voting');
@@ -11,7 +12,7 @@ var image2 = document.getElementById('image2');
 var image3 = document.getElementById('image3');
 var indexesOfThreeOnPage = [];
 var numberOfImagesClicked = 0;
-var maxClicks = 25;
+var maxClicks = 7;
 
 // imageStatus is an array keeps track of which images have shown in the previous & current
 var imageStatus = [];
@@ -37,24 +38,24 @@ new ImageObject('Bathroom', './img/bathroom.jpg');
 new ImageObject('Boots', './img/boots.jpg');
 new ImageObject('Breakfast', './img/breakfast.jpg');
 new ImageObject('Bubblegum', './img/bubblegum.jpg');
-new ImageObject('Chair', './img/chair.jpg');
-new ImageObject('Cthulhu', './img/cthulhu.jpg');
-new ImageObject('Dog-duck', './img/dog-duck.jpg');
-new ImageObject('Dragon', './img/dragon.jpg');
-new ImageObject('Pen', './img/pen.jpg');
-new ImageObject('Pet-sweep', './img/pet-sweep.jpg');
-new ImageObject('Scissors', './img/scissors.jpg');
-new ImageObject('Shark', './img/shark.jpg');
-new ImageObject('Sweet', './img/sweep.png');
-new ImageObject('Tauntaun', './img/tauntaun.jpg');
-new ImageObject('Unicorn', './img/unicorn.jpg');
-new ImageObject('USB', './img/usb.gif');
-new ImageObject('Water can', './img/water-can.jpg');
-new ImageObject('Wine glass', './img/wine-glass.jpg');
+// new ImageObject('Chair', './img/chair.jpg');
+// new ImageObject('Cthulhu', './img/cthulhu.jpg');
+// new ImageObject('Dog-duck', './img/dog-duck.jpg');
+// new ImageObject('Dragon', './img/dragon.jpg');
+// new ImageObject('Pen', './img/pen.jpg');
+// new ImageObject('Pet-sweep', './img/pet-sweep.jpg');
+// new ImageObject('Scissors', './img/scissors.jpg');
+// new ImageObject('Shark', './img/shark.jpg');
+// new ImageObject('Sweet', './img/sweep.png');
+// new ImageObject('Tauntaun', './img/tauntaun.jpg');
+// new ImageObject('Unicorn', './img/unicorn.jpg');
+// new ImageObject('USB', './img/usb.gif');
+// new ImageObject('Water can', './img/water-can.jpg');
+// new ImageObject('Wine glass', './img/wine-glass.jpg');
 
 
 
-// populate imageStatus with zeros 
+// populate imageStatus with zeros
 for (var i = 0; i < ImageObject.allImages.length; i++) {
   imageStatus.push(0);
 }
@@ -171,75 +172,81 @@ function pushDataToLocalStorage() {
 
 function createChart() {
 
-  // Retreive chart labels and percentages from local storage 
+  // Retreive chart labels and percentages from local storage
   var chartLabels = JSON.parse(localStorage.getItem('chartLabels'));
   var chartPercentages = JSON.parse(localStorage.getItem('chartPercentages'));
   console.log (chartPercentages);
   var ctx = document.getElementById('myChart');
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: chartLabels,
-      datasets: [{
-        label: '# of Votes',
-        data: chartPercentages,
-        backgroundColor: [
-          'rgba(78,32,243,.6)',
-          'rgba(32,164,243, .6)',
-          'rgba(73,211,63,.6)',
-          'rgba(255,231,76,.6)',
-          'rgba(241,113,5,.6)',
-          'rgba(78,32,243,.6)',
-          '#rgba(32,164,243, .6)',
-          'rgba(73,211,63,.6)',
-          'rgba(255,231,76,.6)',
-          'rgba(241,113,5,.6)',
-          'rgba(78,32,243,.6)',
-          '#rgba(32,164,243, .6)',
-          'rgba(73,211,63,.6)',
-          'rgba(255,231,76,.6)',
-          'rgba(241,113,5,.6)',
-          'rgba(78,32,243,.6)',
-          '#rgba(32,164,243, .6)',
-          'rgba(73,211,63,.6)',
-          'rgba(255,231,76,.6)',
-          'rgba(241,113,5,.6)'
-        ],
-        borderColor: [
-          'rgba(78,32,243,1)',
-          'rgba(32,164,243, 1)',
-          'rgba(73,211,63,1)',
-          'rgba(255,231,76,1)',
-          'rgba(241,113,5,1)',
-          'rgba(78,32,243,1)',
-          '#rgba(32,164,243, 1)',
-          'rgba(73,211,63,1)',
-          'rgba(255,231,76,1)',
-          'rgba(241,113,5,1)',
-          'rgba(78,32,243,1)',
-          '#rgba(32,164,243, 1)',
-          'rgba(73,211,63,1)',
-          'rgba(255,231,76,1)',
-          'rgba(241,113,5,1)',
-          'rgba(78,32,243,1)',
-          '#rgba(32,164,243, 1)',
-          'rgba(73,211,63,1)',
-          'rgba(255,231,76,1)',
-          'rgba(241,113,5,1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      // scales: {
-      //   yAxes: [{
-      //     ticks: {
-      //       beginAtZero: true
-      //     }
-      //   }]
-      // }
-    }
-  });
+  if(myChart){
+    myChart.data.datasets[0].data = chartPercentages;
+    myChart.update();
+  } else {
+
+    myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          label: '# of Votes',
+          data: chartPercentages,
+          backgroundColor: [
+            'rgba(78,32,243,.6)',
+            'rgba(32,164,243, .6)',
+            'rgba(73,211,63,.6)',
+            'rgba(255,231,76,.6)',
+            'rgba(241,113,5,.6)',
+            'rgba(78,32,243,.6)',
+            '#rgba(32,164,243, .6)',
+            'rgba(73,211,63,.6)',
+            'rgba(255,231,76,.6)',
+            'rgba(241,113,5,.6)',
+            'rgba(78,32,243,.6)',
+            '#rgba(32,164,243, .6)',
+            'rgba(73,211,63,.6)',
+            'rgba(255,231,76,.6)',
+            'rgba(241,113,5,.6)',
+            'rgba(78,32,243,.6)',
+            '#rgba(32,164,243, .6)',
+            'rgba(73,211,63,.6)',
+            'rgba(255,231,76,.6)',
+            'rgba(241,113,5,.6)'
+          ],
+          borderColor: [
+            'rgba(78,32,243,1)',
+            'rgba(32,164,243, 1)',
+            'rgba(73,211,63,1)',
+            'rgba(255,231,76,1)',
+            'rgba(241,113,5,1)',
+            'rgba(78,32,243,1)',
+            '#rgba(32,164,243, 1)',
+            'rgba(73,211,63,1)',
+            'rgba(255,231,76,1)',
+            'rgba(241,113,5,1)',
+            'rgba(78,32,243,1)',
+            '#rgba(32,164,243, 1)',
+            'rgba(73,211,63,1)',
+            'rgba(255,231,76,1)',
+            'rgba(241,113,5,1)',
+            'rgba(78,32,243,1)',
+            '#rgba(32,164,243, 1)',
+            'rgba(73,211,63,1)',
+            'rgba(255,231,76,1)',
+            'rgba(241,113,5,1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+  }
 
 }
 
@@ -255,7 +262,7 @@ restartButtonTag.addEventListener('click', function(event){
   //event.preventDefault();
   imageTableTag.classList.replace('hide-table','show-table');
   buttonTableTag.classList.replace('show-table','hide-table');
-  dataDivTag.classList.replace('show-table','hide-table');
+  // dataDivTag.classList.replace('show-table','hide-table');
 
   numberOfImagesClicked = 0;
   console.log(numberOfImagesClicked);
@@ -267,7 +274,7 @@ restartButtonTag.addEventListener('click', function(event){
 
 // Checks to see if maxClicks was previously reached
 var checkForData = function(){
-  //var maxClicksReachedPreviously = 
+  //var maxClicksReachedPreviously =
   if (parseInt(localStorage.getItem('clickesReached')) === 1) {
     hideImageTable();
     createChart();
