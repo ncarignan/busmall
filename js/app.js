@@ -38,7 +38,7 @@ new ImageObject('Bathroom', './img/bathroom.jpg');
 new ImageObject('Boots', './img/boots.jpg');
 new ImageObject('Breakfast', './img/breakfast.jpg');
 new ImageObject('Bubblegum', './img/bubblegum.jpg');
-// new ImageObject('Chair', './img/chair.jpg');
+new ImageObject('Chair', './img/chair.jpg');
 // new ImageObject('Cthulhu', './img/cthulhu.jpg');
 // new ImageObject('Dog-duck', './img/dog-duck.jpg');
 // new ImageObject('Dragon', './img/dragon.jpg');
