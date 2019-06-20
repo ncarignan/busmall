@@ -3,14 +3,15 @@
 // GLOBAL VARIABLES
 
 var imageTableTag = document.getElementById('image-table');
+var buttonTableTag = document.getElementById('button-table');
+var restartButtonTag = document.getElementById('restart-voting');
+var dataDivTag = document.getElementById('data');
 var image1 = document.getElementById('image1');
 var image2 = document.getElementById('image2');
 var image3 = document.getElementById('image3');
 var indexesOfThreeOnPage = [];
 var numberOfImagesClicked = 0;
-var maxClicks = 10;
-
-//var threeOnPageArr = [];
+var maxClicks = 25;
 
 // imageStatus is an array keeps track of which images have shown in the previous & current
 var imageStatus = [];
@@ -58,6 +59,7 @@ for (var i = 0; i < ImageObject.allImages.length; i++) {
   imageStatus.push(0);
 }
 
+// Function to display the three images up for voting
 var pickThreeImages = function () {
 
   var j = 0;
@@ -68,21 +70,17 @@ var pickThreeImages = function () {
     var randomIndex = Math.floor(Math.random() * (ImageObject.allImages.length));
 
     // randomIndex = 0 : good to use
-    // randomIndex = 1 : chosen
+    // randomIndex = 1 : chosen in this or previous round
 
     if (imageStatus[randomIndex] === 0) {
       indexesOfThreeOnPage[j] = randomIndex;
-      //threeOnPageArr[j] = [ImageObject.allImages[randomIndex], randomIndex];
       imageStatus[randomIndex] = 1;
       ImageObject.allImages[randomIndex].timesShown++;
       j++;
     }
-
   }
 
-  //console.log('before reset: ' + imageStatus);
-
-  //reset imageStatusArray
+  //reset imageStatusArray to clear previou images
   for (var i = 0; i < ImageObject.allImages.length; i++) {
 
     if (i === indexesOfThreeOnPage[0] || i === indexesOfThreeOnPage[1] || i === indexesOfThreeOnPage[2]) {
@@ -91,18 +89,20 @@ var pickThreeImages = function () {
     } else { imageStatus[i] = 0; }
   }
 
-  //console.log('after reset: ' + imageStatus);
+  // Renders the three images
 
   image1.src = ImageObject.allImages[indexesOfThreeOnPage[0]].url;
   image2.src = ImageObject.allImages[indexesOfThreeOnPage[1]].url;
   image3.src = ImageObject.allImages[indexesOfThreeOnPage[2]].url;
 
+  // Checking to see if clicks(votes) exceed upper limit set in the global variables
   if (numberOfImagesClicked > maxClicks) {
     imageTableTag.removeEventListener('click', imageClickedOn);
+    hideImageTable();
     pushDataToLocalStorage();
-    createPieChart();
+    createChart();
     printImageList();
-    //console.log('stop event listener');
+    localStorage.setItem('clickesReached', '1');
   } else {
     imageTableTag.addEventListener('click', imageClickedOn);
   }
@@ -128,15 +128,13 @@ var printImageList = function () {
 
 var imageClickedOn = function (event) {
 
+  // Populates an array that holds the indexes of the three images on the pageXOffset
   if (event.target.id === 'image1') {
     ImageObject.allImages[indexesOfThreeOnPage[0]].clicks++;
-    //console.log(ImageObject.allImages[indexesOfThreeOnPage[0]]);
   } else if (event.target.id === 'image2') {
     ImageObject.allImages[indexesOfThreeOnPage[1]].clicks++;
-    //console.log(ImageObject.allImages[indexesOfThreeOnPage[1]]);
   } else if (event.target.id === 'image3') {
     ImageObject.allImages[indexesOfThreeOnPage[2]].clicks++;
-    //console.log(ImageObject.allImages[indexesOfThreeOnPage[2]]);
   }
 
   pickThreeImages();
@@ -171,12 +169,12 @@ function pushDataToLocalStorage() {
 
 }
 
-function createPieChart() {
+function createChart() {
 
   // Retreive chart labels and percentages from local storage 
   var chartLabels = JSON.parse(localStorage.getItem('chartLabels'));
   var chartPercentages = JSON.parse(localStorage.getItem('chartPercentages'));
-
+  console.log (chartPercentages);
   var ctx = document.getElementById('myChart');
   var myChart = new Chart(ctx, {
     type: 'bar',
@@ -245,4 +243,37 @@ function createPieChart() {
 
 }
 
+// Hides voting options
+var hideImageTable = function () {
+  imageTableTag.classList.replace('show-table','hide-table');
+  buttonTableTag.classList.replace('hide-table','show-table');
+  dataDivTag.classList.replace('hide-table','show-table');
+};
+
+// Shows image table and restarts voting
+restartButtonTag.addEventListener('click', function(event){
+  //event.preventDefault();
+  imageTableTag.classList.replace('hide-table','show-table');
+  buttonTableTag.classList.replace('show-table','hide-table');
+  dataDivTag.classList.replace('show-table','hide-table');
+
+  numberOfImagesClicked = 0;
+  console.log(numberOfImagesClicked);
+  localStorage.clear();
+  localStorage.setItem('clickesReached', '0');
+  imageTableTag.addEventListener('click', imageClickedOn);
+
+});
+
+// Checks to see if maxClicks was previously reached
+var checkForData = function(){
+  //var maxClicksReachedPreviously = 
+  if (parseInt(localStorage.getItem('clickesReached')) === 1) {
+    hideImageTable();
+    createChart();
+    printImageList();
+  }
+};
+
 pickThreeImages();
+checkForData();

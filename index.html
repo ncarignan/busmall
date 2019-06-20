@@ -9,12 +9,12 @@
 
 <body>
   <header>
-    <h1>Select your favorite image</h1>
-    <p>After you select 25 images, you'll be shown a chart that shows what you selected.</p>
+    <h1>Select your favorite images</h1>
+    <p>After you select 25 images, you'll be shown a chart that shows your results. The chart data should persist until you choose to restart voting. </p>
   </header>
   <main>
 
-    <table id="image-table">
+    <table id="image-table" class="show-table">
       <tr>
         <td><img id="image1" src=""></td>
         <td><img id="image2" src=""></td>
@@ -22,7 +22,16 @@
         </td>
       </tr>
     </table>
-    <div class="data">
+<table></table>
+<table id="button-table" class="hide-table">
+  <tr>
+    <td>
+      <p>You have already submitted your votes. Press the button below to restart voting.</p>
+      <button id="restart-voting">Restart voting</button>
+    </td>
+  </tr>
+</table>
+    <div id="data" class="hide-table">
       <ul id="image-list">
       </ul>
       <div class="chart-container">
